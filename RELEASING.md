@@ -50,7 +50,7 @@ cd registry/config/eslint
 # Patch version (0.0.2 -> 0.0.3)
 pnpm run version:patch
 
-# Minor version (0.0.2 -> 0.1.0)
+# Minor version (0.0.2 -> 0.1.0)  
 pnpm run version:minor
 
 # Major version (0.0.2 -> 1.0.0)
@@ -59,6 +59,8 @@ pnpm run version:major
 # Prerelease version (0.0.2 -> 0.0.3-0)
 pnpm run version:prerelease
 ```
+
+**Note**: These scripts automatically update package.json AND create the git tag, so the GitHub Actions workflow will verify the versions match.
 
 ### Option 2: Manual git commands
 
@@ -88,7 +90,7 @@ When you push a tag, the GitHub Actions workflow will:
 2. **✅ Setup Node.js and pnpm**
 3. **✅ Install dependencies**
 4. **✅ Extract version** from the git tag
-5. **✅ Update package.json** with the new version
+5. **✅ Verify package.json version** matches the tag
 6. **✅ Run tests** (if configured)
 7. **✅ Run linting** (if configured)
 8. **✅ Build package** (if build script exists)
