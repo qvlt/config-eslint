@@ -1,0 +1,18 @@
+{
+  "name": "@qvlt/config-eslint-example",
+  "version": "1.0.0",
+  "description": "Example project using @qvlt/config-eslint",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@qvlt/config-eslint": "^0.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
