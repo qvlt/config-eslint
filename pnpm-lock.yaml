@@ -46,8 +46,8 @@ importers:
   example:
     dependencies:
       '@qvlt/config-eslint':
-        specifier: ^0.0.2
-        version: 0.0.2(@typescript-eslint/parser@8.41.0(eslint@9.34.0)(typescript@5.9.2))(typescript@5.9.2)
+        specifier: file:..
+        version: file:(@typescript-eslint/parser@8.41.0(eslint@9.34.0)(typescript@5.9.2))(typescript@5.9.2)
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -137,8 +137,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@qvlt/config-eslint@0.0.2':
-    resolution: {integrity: sha512-EFvM++kJXteqkor7Cm5au2zSf69nTk3dOt4kJNL76GJ8EqocM4zzAzxrpZNwlSk8UukqjboXjioYZMgrB+hb1g==}
+  '@qvlt/config-eslint@file:':
+    resolution: {directory: '', type: directory}
     engines: {node: '>=18.18.0'}
 
   '@rtsao/scc@1.1.0':
@@ -1399,7 +1399,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@qvlt/config-eslint@0.0.2(@typescript-eslint/parser@8.41.0(eslint@9.34.0)(typescript@5.9.2))(typescript@5.9.2)':
+  '@qvlt/config-eslint@file:(@typescript-eslint/parser@8.41.0(eslint@9.34.0)(typescript@5.9.2))(typescript@5.9.2)':
     dependencies:
       '@eslint/js': 9.34.0
       eslint: 9.34.0

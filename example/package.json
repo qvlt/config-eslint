@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@qvlt/config-eslint": "^0.0.2"
+    "@qvlt/config-eslint": "file:.."
   },
   "devDependencies": {
     "typescript": "^5.9.2"
