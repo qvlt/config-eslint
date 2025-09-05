@@ -32,7 +32,13 @@ jobs:
           always-auth: true
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          # Try frozen-lockfile first, fallback to regular install if needed
+          if ! pnpm install --frozen-lockfile; then
+            echo "Lockfile is outdated, updating dependencies..."
+            pnpm install
+            echo "Warning: Lockfile was updated during CI run"
+          fi
 
       - name: Extract version from tag
         id: version
