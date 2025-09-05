@@ -50,7 +50,7 @@ cd registry/config/eslint
 # Patch version (0.0.2 -> 0.0.3)
 pnpm run version:patch
 
-# Minor version (0.0.2 -> 0.1.0)  
+# Minor version (0.0.2 -> 0.1.0)
 pnpm run version:minor
 
 # Major version (0.0.2 -> 1.0.0)
@@ -84,7 +84,12 @@ git push --follow-tags
 
 ## 🔄 Release Process
 
-When you push a tag, the GitHub Actions workflow will:
+### Workflow Separation
+
+- **CI Workflow** (`ci.yml`): Runs on every push/PR for testing only
+- **Release Workflow** (`release.yml`): Runs only on git tags for publishing
+
+When you push a tag, the **Release workflow** will:
 
 1. **✅ Checkout code** with full git history
 2. **✅ Setup Node.js and pnpm**

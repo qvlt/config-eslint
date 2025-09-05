@@ -52,16 +52,16 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           CURRENT_VERSION=$(jq -r '.version' package.json)
-          
+
           echo "Expected version from tag: $VERSION"
           echo "Current version in package.json: $CURRENT_VERSION"
-          
+
           if [ "$CURRENT_VERSION" != "$VERSION" ]; then
             echo "Error: package.json version ($CURRENT_VERSION) doesn't match tag version ($VERSION)"
             echo "Make sure to run 'pnpm version' before creating the tag"
             exit 1
           fi
-          
+
           echo "Version verification passed: $VERSION"
 
       - name: Run tests (if available)
