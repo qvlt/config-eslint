@@ -42,7 +42,7 @@
   "homepage": "https://github.com/qvlt/config-eslint#readme",
   "packageManager": "pnpm@10.15.0",
   "scripts": {
-    "preversion": "bash -lc 'set -euxo pipefail; pnpm install --frozen-lockfile; pnpm -C example install --no-frozen-lockfile; pnpm exec eslint example --ext .ts,.tsx,.js,.jsx --max-warnings=0; pnpm -C example run type-check; pnpm pack --dry-run'",
+    "preversion": "bash -lc 'set -euxo pipefail; pnpm install --frozen-lockfile; pnpm -C example install --no-frozen-lockfile; pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0; pnpm -C example run type-check; pnpm pack --dry-run'",
     "version": "git add -A && git commit --amend -m \"chore(release): v%s\" --no-edit || true",
     "postversion": "git push --follow-tags",
     "release:patch": "pnpm version patch -m \"chore(release): v%s\"",
