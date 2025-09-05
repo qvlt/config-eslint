@@ -5,7 +5,7 @@ ESLint configuration for Qvlt projects.
 ## Installation
 
 ```bash
-npm install --save-dev @qvlt/config-eslint
+pnpm add -D @qvlt/config-eslint
 ```
 
 **Note**: `eslint` and all required plugins are included as dependencies, so you don't need to install them separately.
@@ -231,6 +231,30 @@ The package includes an example project in the `example/` directory that demonst
 pnpm --filter example lint
 pnpm --filter example type-check
 ```
+
+### Releasing
+
+This package uses **tag-based publishing** with GitHub Actions for automated releases. See [RELEASING.md](./RELEASING.md) for detailed instructions.
+
+Quick release commands:
+
+```bash
+# Patch version (0.0.2 -> 0.0.3)
+pnpm run version:patch
+
+# Minor version (0.0.2 -> 0.1.0)
+pnpm run version:minor
+
+# Major version (0.0.2 -> 1.0.0)
+pnpm run version:major
+```
+
+The GitHub Actions workflow will automatically:
+
+- Update package.json version
+- Run tests and linting
+- Publish to npm as public package
+- Create GitHub release with changelog
 
 ## License
 

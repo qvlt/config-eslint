@@ -41,6 +41,14 @@
   },
   "homepage": "https://github.com/qvlt/config-eslint#readme",
   "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "version:patch": "pnpm version patch && git push --follow-tags",
+    "version:minor": "pnpm version minor && git push --follow-tags",
+    "version:major": "pnpm version major && git push --follow-tags",
+    "version:prerelease": "pnpm version prerelease && git push --follow-tags",
+    "test": "echo 'No tests configured'",
+    "lint": "echo 'No linting configured'"
+  },
   "dependencies": {
     "@eslint/js": "^9.34.0",
     "eslint": "^9.34.0",
