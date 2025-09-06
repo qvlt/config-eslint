@@ -43,8 +43,6 @@
   "packageManager": "pnpm@10.15.0",
   "scripts": {
     "preversion": "bash -lc 'set -euxo pipefail; pnpm i --frozen-lockfile --ignore-workspace; pnpm -C example i --no-frozen-lockfile --ignore-workspace; pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0'",
-    "version": "echo \"version hook: commit handled by pnpm version -m (no tag)\"",
-    "postversion": "echo \"postversion: skip pushing/tags (tag after merge on main)\"",
     "release:prep:patch": "pnpm version patch --no-git-tag-version -m \"chore(release): v%s\"",
     "release:prep:minor": "pnpm version minor --no-git-tag-version -m \"chore(release): v%s\"",
     "release:prep:major": "pnpm version major --no-git-tag-version -m \"chore(release): v%s\"",
