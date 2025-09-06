@@ -3,12 +3,12 @@ name: CI
 
 on:
   push:
-    branches: [main, dev] # only run CI on pushes to main/dev
-    tags-ignore: ['v*'] # skip release tags
+    branches: [main, dev]
+    tags-ignore: ['v*']
   pull_request:
-    branches: [main, dev] # run CI on PRs targeting main/dev
+    branches: [main, dev]
     types: [opened, synchronize, reopened, ready_for_review]
-  workflow_dispatch: {} # allow manual runs if needed
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -41,25 +41,28 @@ jobs:
           cache: pnpm
 
       - name: Install root dependencies (strict)
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-workspace
 
       - name: Install example deps (isolated)
         working-directory: example
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --no-frozen-lockfile --ignore-workspace
 
       - name: Lint example (no warnings)
         working-directory: example
         run: pnpm exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0
 
-      # If you don't want type-checks for example, keep this step removed.
-      # - name: Type-check example
-      #   working-directory: example
-      #   run: pnpm run type-check
+      # (Type-check intentionally omitted)
 
       - name: Pack preview (what would publish)
+        if: matrix.node-version == '22.x' # run once; tarball content is identical
         run: |
           set -euo pipefail
-          PKG="$(pnpm pack --silent)"
+          OUT="$(pnpm pack)"                      # pnpm prints a pretty multi-line summary
+          echo "$OUT"
+          PKG="$(echo "$OUT" | grep -Eo '[^[:space:]]+\.tgz' | tail -n1)"
+          if [ -z "${PKG:-}" ]; then
+            echo "Could not determine tarball filename from pnpm output"; exit 1;
+          fi
           echo "Tarball: $PKG"
           tar -tf "$PKG"
           rm -f "$PKG"
