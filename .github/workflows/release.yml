@@ -3,12 +3,12 @@ name: Release
 
 on:
   push:
-    tags: ['v*']  # e.g. v1.2.3
+    tags: ['v*'] # e.g. v1.2.3
 
 permissions:
-  contents: write   # create GitHub Releases
-  checks: read      # (if you add API-based gating later)
-  id-token: write   # npm provenance
+  contents: write # create GitHub Releases
+  checks: read # (if you add API-based gating later)
+  id-token: write # npm provenance
 
 concurrency:
   group: release-${{ github.ref }}
@@ -124,4 +124,4 @@ jobs:
 
       - name: Skip (already on npm)
         if: steps.exists.outputs.value == 'true'
-        run: echo "Skipping: ${{ steps.version.outputs.version }} already on npm"
+        run: 'echo "Skipping: ${{ steps.version.outputs.version }} already on npm"'
