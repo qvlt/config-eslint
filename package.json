@@ -1,6 +1,6 @@
 {
   "name": "@qvlt/config-eslint",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "ESLint configuration for Qvlt projects",
   "type": "module",
   "main": "index.js",
@@ -42,7 +42,7 @@
   "homepage": "https://github.com/qvlt/config-eslint#readme",
   "packageManager": "pnpm@10.15.0",
   "scripts": {
-    "preversion": "bash -lc 'set -euxo pipefail; pnpm install --frozen-lockfile --ignore-workspace; pnpm -C example install --no-frozen-lockfile --ignore-workspace; pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0; pnpm pack --dry-run'",
+    "preversion": "bash -lc 'set -euxo pipefail; pnpm i --frozen-lockfile --ignore-workspace; pnpm -C example i --no-frozen-lockfile --ignore-workspace; pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0'",
     "version": "git add -A && git commit --amend -m \"chore(release): v%s\" --no-edit || true",
     "postversion": "git push --follow-tags",
     "release:patch": "pnpm version patch -m \"chore(release): v%s\"",
