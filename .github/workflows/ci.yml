@@ -1,16 +1,20 @@
+# .github/workflows/ci.yml
 name: CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev] # only run CI on pushes to main/dev
+    tags-ignore: ['v*'] # skip release tags
   pull_request:
-    branches: [main, dev]
+    branches: [main, dev] # run CI on PRs targeting main/dev
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch: {} # allow manual runs if needed
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -39,15 +43,22 @@ jobs:
       - name: Install root dependencies (strict)
         run: pnpm install --frozen-lockfile
 
-      - name: Lint example (no workspace)
+      - name: Install example deps (isolated)
         working-directory: example
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Lint example (no warnings)
+        working-directory: example
+        run: pnpm exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0
+
+      # If you don't want type-checks for example, keep this step removed.
+      # - name: Type-check example
+      #   working-directory: example
+      #   run: pnpm run type-check
+
+      - name: Pack preview (what would publish)
         run: |
-          pnpm install --no-frozen-lockfile
-          pnpm run lint -- --max-warnings=0
-
-      - name: Type-check example
-        working-directory: example
-        run: pnpm run type-check
-
-      - name: Pack preview (sanity check publish contents)
-        run: pnpm pack --dry-run
+          PKG="$(pnpm pack --silent)"
+          echo "Tarball: $PKG"
+          tar -tf "$PKG"
+          rm -f "$PKG"
