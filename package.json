@@ -51,7 +51,7 @@
     "release:prep:prerelease": "pnpm version prerelease --no-git-tag-version -m \"chore(release): v%s\"",
     "release:prep:alpha": "pnpm version prerelease --preid alpha --no-git-tag-version -m \"chore(release): v%s\"",
     "release:prep:beta": "pnpm version prerelease --preid beta --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:changelog": "bash -lc 'set -euo pipefail; if [ -f CHANGELOG.md ]; then git add CHANGELOG.md; V=$(node -p \"require(\\\"./package.json\\\").version\"); git commit -m \"chore(release): prepare v$V\" || true; else echo \"No CHANGELOG.md, skipping\"; fi'",
+    "release:changelog": "bash -lc 'set -euo pipefail; if [ -f CHANGELOG.md ]; then git add CHANGELOG.md; V=$(node -p \"require(\\\"./package.json\\\").version\"); if ! git commit -m \"chore(release): prepare v$V\"; then if git status | grep -q \"nothing to commit\"; then echo \"No changes to commit\"; else echo \"git commit failed\"; exit 1; fi; fi; else echo \"No CHANGELOG.md, skipping\"; fi'",
     "release:tag": "bash -lc 'set -euo pipefail; [ \"$(git rev-parse --abbrev-ref HEAD)\" = main ] || { echo \"Error: run on main\"; exit 1; }; V=$(node -p \"require(\\\"./package.json\\\").version\"); git tag v$V -m \"Release $V\"; git push origin v$V'",
     "release:tag:signed": "bash -lc 'set -euo pipefail; [ \"$(git rev-parse --abbrev-ref HEAD)\" = main ] || { echo \"Error: run on main\"; exit 1; }; V=$(node -p \"require(\\\"./package.json\\\").version\"); git tag -s v$V -m \"Release $V\"; git push origin v$V'",
     "checks:example": "pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0",
