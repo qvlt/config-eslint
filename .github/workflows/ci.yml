@@ -59,9 +59,7 @@ jobs:
       - name: Pack preview (what would publish)
         run: |
           set -euo pipefail
-          OUT="$(pnpm pack)"             # pretty, multi-line output
-          echo "$OUT"
-          PKG="$(echo "$OUT" | grep -Eo '[^[:space:]]+\.tgz' | tail -n1)"
+          PKG="$(pnpm pack --silent)"
           echo "Tarball: $PKG"
           tar -tf "$PKG"
           rm -f "$PKG"
