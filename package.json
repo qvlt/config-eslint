@@ -1,0 +1,64 @@
+{
+  "name": "@qvlt/config-eslint",
+  "version": "0.0.11",
+  "description": "ESLint configuration for Qvlt projects",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./react.js": "./react.js",
+    "./typescript.js": "./typescript.js",
+    "./monorepo.js": "./monorepo.js",
+    "./typechecked.js": "./typechecked.js"
+  },
+  "files": [
+    "index.js",
+    "react.js",
+    "typescript.js",
+    "monorepo.js",
+    "typechecked.js"
+  ],
+  "keywords": [
+    "eslint",
+    "eslint-config",
+    "qvlt"
+  ],
+  "author": "Qvlt",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qvlt/config-eslint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qvlt/config-eslint/issues"
+  },
+  "homepage": "https://github.com/qvlt/config-eslint#readme",
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "release:tag": "bash -lc 'set -euo pipefail; [ \"$(git rev-parse --abbrev-ref HEAD)\" = main ] || { echo \"Error: run on main\"; exit 1; }; V=$(node -p \"require(\\\"./package.json\\\").version\"); git tag v$V -m \"Release $V\"; git push origin v$V'",
+    "test": "echo 'No tests configured'",
+    "lint": "echo 'No linting configured'"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "typescript-eslint": "^8.41.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
