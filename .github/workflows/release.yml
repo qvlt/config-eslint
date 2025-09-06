@@ -69,7 +69,7 @@ jobs:
           set -euo pipefail
           OUT="$(pnpm pack)"
           echo "$OUT"
-          PKG="$(echo "$OUT" | grep -Eo '[^[:space:]]+\.tgz' | tail -n1)"
+          PKG="$(echo "$OUT" | grep -Eo '[^[:space:]]+\.tgz$' | tail -n1)"
           if [ -z "${PKG:-}" ] || [ ! -f "$PKG" ]; then
             echo "Could not determine tarball filename from pnpm output"; exit 1;
           fi
