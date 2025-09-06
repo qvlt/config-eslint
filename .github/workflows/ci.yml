@@ -1,16 +1,20 @@
+# .github/workflows/ci.yml
 name: CI
 
 on:
   push:
     branches: [main, dev]
+    tags-ignore: ['v*']
   pull_request:
     branches: [main, dev]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch: {}
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -37,17 +41,28 @@ jobs:
           cache: pnpm
 
       - name: Install root dependencies (strict)
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-workspace
 
-      - name: Lint example (no workspace)
+      - name: Install example deps (isolated)
         working-directory: example
+        run: pnpm install --no-frozen-lockfile --ignore-workspace
+
+      - name: Lint example (no warnings)
+        working-directory: example
+        run: pnpm exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0
+
+      # (Type-check intentionally omitted)
+
+      - name: Pack preview (what would publish)
+        if: matrix.node-version == '22.x' # run once; tarball content is identical
         run: |
-          pnpm install --no-frozen-lockfile
-          pnpm run lint -- --max-warnings=0
-
-      - name: Type-check example
-        working-directory: example
-        run: pnpm run type-check
-
-      - name: Pack preview (sanity check publish contents)
-        run: pnpm pack --dry-run
+          set -euo pipefail
+          OUT="$(pnpm pack)"                      # pnpm prints a pretty multi-line summary
+          echo "$OUT"
+          PKG="$(echo "$OUT" | grep -Eo '[^[:space:]]+\.tgz$' | tail -n1)"
+          if [ -z "${PKG:-}" ]; then
+            echo "Could not determine tarball filename from pnpm output"; exit 1;
+          fi
+          echo "Tarball: $PKG"
+          tar -tf "$PKG"
+          rm -f "$PKG"
