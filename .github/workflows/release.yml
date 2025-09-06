@@ -1,13 +1,14 @@
 # .github/workflows/release.yml
 name: Release
+
 on:
   push:
-    tags: ['v*']    # e.g. v1.2.3
+    tags: ['v*'] # e.g. v1.2.3
 
 permissions:
-  contents: write   # create GitHub Releases
-  checks: read      # read check runs if you add API-based gating later
-  id-token: write   # npm provenance
+  contents: write # create GitHub Releases
+  checks: read # (if you add API-based gating later)
+  id-token: write # npm provenance
 
 concurrency:
   group: release-${{ github.ref }}
@@ -16,14 +17,17 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout (full history)
         uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with: { version: 10.15.0 }
+        with:
+          version: 10.15.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -39,35 +43,40 @@ jobs:
       - name: Extract version from tag
         id: version
         run: |
-          VERSION=${GITHUB_REF_NAME#v}
+          VERSION="${GITHUB_REF_NAME#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Verify package.json version matches tag
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          CURRENT_VERSION=$(jq -r '.version' package.json)
+          CURRENT_VERSION="$(jq -r '.version' package.json)"
           echo "Tag: $VERSION / package.json: $CURRENT_VERSION"
           test "$CURRENT_VERSION" = "$VERSION"
 
-      # 🔒 QUALITY GATE — these must pass or publish won’t run
-      - name: Lint example
+      # 🔒 QUALITY GATE — must pass before publish
+      - name: Install example deps (isolated)
         working-directory: example
-        run: |
-          pnpm install --no-frozen-lockfile
-          pnpm run lint -- --max-warnings=0
+        run: pnpm install --no-frozen-lockfile
 
-      - name: Type-check example
+      - name: Lint example (no warnings allowed)
         working-directory: example
-        run: pnpm run type-check
+        run: pnpm exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0
+
+      # (Type-check step removed per your preference)
 
       - name: Pack preview (what will publish)
-        run: pnpm pack --dry-run
+        # pnpm has no --dry-run; create, list, then delete the tarball
+        run: |
+          PKG="$(pnpm pack --silent)"
+          echo "Tarball: $PKG"
+          tar -tf "$PKG"
+          rm -f "$PKG"
 
       - name: Check if version already exists on npm
         id: exists
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          NAME=$(jq -r .name package.json)
+          NAME="$(jq -r .name package.json)"
           if pnpm view "$NAME@$VERSION" version >/dev/null 2>&1; then
             echo "value=true" >> "$GITHUB_OUTPUT"
           else
@@ -85,7 +94,7 @@ jobs:
         id: prev
         run: |
           git fetch --tags --force
-          PREV=$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || echo "")
+          PREV="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || echo "")"
           echo "prev=$PREV" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
@@ -98,9 +107,7 @@ jobs:
             RANGE="${{ github.ref_name }}"
           fi
 
-          gh release create "${{ github.ref_name }}" \
-            --title "Release $VERSION" \
-            --notes "## @qvlt/config-eslint v$VERSION
+          NOTES="## @qvlt/config-eslint v$VERSION
 
           Install:
           \`\`\`bash
@@ -108,9 +115,13 @@ jobs:
           \`\`\`
 
           Compare: https://github.com/qvlt/config-eslint/compare/$RANGE"
+
+          gh release create "${{ github.ref_name }}" \
+            --title "Release $VERSION" \
+            --notes "$NOTES"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Skip (already on npm)
         if: steps.exists.outputs.value == 'true'
-        run: echo "Skipping: ${{ steps.version.outputs.version }} already on npm"
+        run: 'echo "Skipping: ${{ steps.version.outputs.version }} already on npm"'
