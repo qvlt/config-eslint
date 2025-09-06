@@ -97,17 +97,19 @@ jobs:
           else
             RANGE="${{ github.ref_name }}"
           fi
-
-          gh release create "${{ github.ref_name }}" \
-            --title "Release $VERSION" \
-            --notes "## @qvlt/config-eslint v$VERSION
-
+          
+          NOTES="## @qvlt/config-eslint v$VERSION
+          
           Install:
           \`\`\`bash
           pnpm add -D @qvlt/config-eslint@$VERSION
           \`\`\`
-
+          
           Compare: https://github.com/qvlt/config-eslint/compare/$RANGE"
+          
+          gh release create "${{ github.ref_name }}" \
+            --title "Release $VERSION" \
+            --notes "$NOTES"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
