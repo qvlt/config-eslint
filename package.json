@@ -1,6 +1,6 @@
 {
   "name": "@qvlt/config-eslint",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "ESLint configuration for Qvlt projects",
   "type": "module",
   "main": "index.js",
