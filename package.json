@@ -42,17 +42,7 @@
   "homepage": "https://github.com/qvlt/config-eslint#readme",
   "packageManager": "pnpm@10.15.0",
   "scripts": {
-    "preversion": "bash -lc 'set -euxo pipefail; pnpm i --frozen-lockfile --ignore-workspace; pnpm -C example i --no-frozen-lockfile --ignore-workspace; pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0'",
-    "release:prep:patch": "pnpm version patch --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:prep:minor": "pnpm version minor --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:prep:major": "pnpm version major --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:prep:prerelease": "pnpm version prerelease --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:prep:alpha": "pnpm version prerelease --preid alpha --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:prep:beta": "pnpm version prerelease --preid beta --no-git-tag-version -m \"chore(release): v%s\"",
-    "release:changelog": "bash -lc 'set -euo pipefail; if [ -f CHANGELOG.md ]; then git add CHANGELOG.md; V=$(node -p \"require(\\\"./package.json\\\").version\"); if ! git commit -m \"chore(release): prepare v$V\"; then if git status | grep -q \"nothing to commit\"; then echo \"No changes to commit\"; else echo \"git commit failed\"; exit 1; fi; fi; else echo \"No CHANGELOG.md, skipping\"; fi'",
     "release:tag": "bash -lc 'set -euo pipefail; [ \"$(git rev-parse --abbrev-ref HEAD)\" = main ] || { echo \"Error: run on main\"; exit 1; }; V=$(node -p \"require(\\\"./package.json\\\").version\"); git tag v$V -m \"Release $V\"; git push origin v$V'",
-    "release:tag:signed": "bash -lc 'set -euo pipefail; [ \"$(git rev-parse --abbrev-ref HEAD)\" = main ] || { echo \"Error: run on main\"; exit 1; }; V=$(node -p \"require(\\\"./package.json\\\").version\"); git tag -s v$V -m \"Release $V\"; git push origin v$V'",
-    "checks:example": "pnpm -C example exec eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0",
     "test": "echo 'No tests configured'",
     "lint": "echo 'No linting configured'"
   },
