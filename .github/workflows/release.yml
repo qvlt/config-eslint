@@ -64,10 +64,15 @@ jobs:
 
       # (Type-check step removed per your preference)
 
-      - name: Pack preview (what will publish)
-        # pnpm has no --dry-run; create, list, then delete the tarball
+      - name: Pack preview (pnpm-only, robust)
         run: |
-          PKG="$(pnpm pack --silent)"
+          set -euo pipefail
+          OUT="$(pnpm pack)"
+          echo "$OUT"
+          PKG="$(echo "$OUT" | grep -Eo '[^[:space:]]+\.tgz' | tail -n1)"
+          if [ -z "${PKG:-}" ] || [ ! -f "$PKG" ]; then
+            echo "Could not determine tarball filename from pnpm output"; exit 1;
+          fi
           echo "Tarball: $PKG"
           tar -tf "$PKG"
           rm -f "$PKG"
