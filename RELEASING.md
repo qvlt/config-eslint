@@ -7,7 +7,7 @@ This package uses **tag-based publishing** with GitHub Actions for automated rel
 1. **Create a git tag** (e.g., `v1.0.0`)
 2. **Push the tag** to GitHub
 3. **GitHub Actions automatically**:
-   - Updates package.json version
+   - Verifies package.json version matches the tag
    - Runs tests and linting
    - Publishes to npm
    - Creates a GitHub release
