@@ -1,6 +1,7 @@
 name: Bug report
 description: Report a bug
 labels: [bug]
+title: '[bug]: '
 body:
   - type: textarea
     id: desc
@@ -8,7 +9,12 @@ body:
     validations: { required: true }
   - type: input
     id: version
-    attributes: { label: Package version }
+    attributes: { label: Package version (e.g. 0.0.12) }
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Node: 22.x\nOS: macOS 14 / Ubuntu 22.04\nPackage manager: pnpm 10.15.0"
   - type: textarea
     id: extra
     attributes: { label: Extra context }
