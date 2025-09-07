@@ -239,19 +239,16 @@ This package uses **tag-based publishing** with GitHub Actions for automated rel
 Quick release commands:
 
 ```bash
-# Patch version (0.0.2 -> 0.0.3)
-pnpm run version:patch
+# 1. Manually update version in package.json
+# Edit package.json: "version": "0.0.3"
 
-# Minor version (0.0.2 -> 0.1.0)
-pnpm run version:minor
-
-# Major version (0.0.2 -> 1.0.0)
-pnpm run version:major
+# 2. Create and push git tag to trigger release
+pnpm run release:tag
 ```
 
 The GitHub Actions workflow will automatically:
 
-- Update package.json version
+- Verify package.json version matches git tag
 - Run tests and linting
 - Publish to npm as public package
 - Create GitHub release with changelog
