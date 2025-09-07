@@ -41,45 +41,33 @@ corepack enable
 
 ## 🏷️ Creating Releases
 
-### Option 1: Using pnpm scripts (Recommended)
+### Simple Two-Step Process
 
 ```bash
 # Navigate to the package directory
 cd registry/config/eslint
 
-# Patch version (0.0.2 -> 0.0.3)
-pnpm run version:patch
+# Step 1: Manually update version in package.json
+# Edit package.json and change: "version": "0.0.3"
 
-# Minor version (0.0.2 -> 0.1.0)
-pnpm run version:minor
-
-# Major version (0.0.2 -> 1.0.0)
-pnpm run version:major
-
-# Prerelease version (0.0.2 -> 0.0.3-0)
-pnpm run version:prerelease
+# Step 2: Create and push git tag to trigger release
+pnpm run release:tag
 ```
 
-**Note**: These scripts automatically update package.json AND create the git tag, so the GitHub Actions workflow will verify the versions match.
+**Note**: The `release:tag` script will:
 
-### Option 2: Manual git commands
+- Verify you're on the `main` branch
+- Extract the version from package.json
+- Create a git tag (e.g., `v0.0.3`)
+- Push the tag to trigger the GitHub Actions release workflow
 
-```bash
-# Update version in package.json and create tag
-pnpm version patch  # or minor, major, prerelease
-
-# Push the tag to trigger the release
-git push --follow-tags
-```
-
-### Option 3: Custom version
+### Alternative: Manual git commands
 
 ```bash
-# Set specific version
-pnpm version 1.2.3
-
-# Push the tag
-git push --follow-tags
+# Update version in package.json manually, then:
+VERSION=$(node -p "require('./package.json').version")
+git tag v$VERSION -m "Release $VERSION"
+git push origin v$VERSION
 ```
 
 ## 🔄 Release Process
@@ -204,13 +192,16 @@ pnpm add -D @qvlt/config-eslint@latest
 git add .
 git commit -m "feat: add new TypeScript configuration"
 
-# 2. Create a minor release
-pnpm run version:minor
+# 2. Update version in package.json manually
+# Edit: "version": "0.1.0"
 
-# 3. Check GitHub Actions
+# 3. Create and push tag to trigger release
+pnpm run release:tag
+
+# 4. Check GitHub Actions
 # Go to: https://github.com/qvlt/config-eslint/actions
 
-# 4. Verify on npm
+# 5. Verify on npm
 npm view @qvlt/config-eslint version
 ```
 
