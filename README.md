@@ -253,6 +253,10 @@ The GitHub Actions workflow will automatically:
 - Publish to npm as public package
 - Create GitHub release with changelog
 
+## Contributing
+
+Want to help? See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
 ## License
 
 MIT
